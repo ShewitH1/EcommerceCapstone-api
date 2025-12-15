@@ -95,7 +95,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
             int rows = statement.executeUpdate();
 
             if(rows > 0){
-                try(ResultSet resultSet = statement.executeQuery()){
+                try(ResultSet resultSet = statement.getGeneratedKeys()){
                     if(resultSet.next()){
                         int category_id = resultSet.getInt(1);
                         category.setCategoryId(category_id);
@@ -141,7 +141,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
 
             statement.setInt(1, categoryId);
 
-            int rows = statement.executeUpdate();
+            statement.executeUpdate();
         }
     }
 
