@@ -5,8 +5,11 @@ import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -20,15 +23,60 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public List<Category> getAllCategories()
     {
+
+        List<Category> categories = new ArrayList<>();
+
+        String query = "select * from categories";
+
         // get all categories
-        return null;
+        try(Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery()) {
+
+            while(resultSet.next()){
+                int categoryid = resultSet.getInt("category_id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+
+                Category category = new Category(categoryid, name, description);
+
+                categories.add(category);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return categories;
     }
 
     @Override
-    public Category getById(int categoryId)
-    {
+    public Category getById(int categoryId) throws SQLException {
+
+        String query = """
+                select * from categories where category_id = ?
+                """;
+
         // get category by id
-        return null;
+        try(Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            ) {
+
+            statement.setInt(1, categoryId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int category_id = resultSet.getInt("category_id");
+                    String name = resultSet.getString("name");
+                    String description = resultSet.getString("description");
+
+                    Category category = new Category(category_id, name, description);
+
+                    return category;
+                } else {
+                    return null;
+                }
+            }
+        }
     }
 
     @Override
