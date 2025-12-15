@@ -67,8 +67,8 @@ public class CategoriesController
 
     @RequestMapping(path = "/categories/{id}", method = RequestMethod.DELETE)// add annotation to call this method for a DELETE action - the url path must include the categoryId
     @PreAuthorize("hasRole('ROLE_ADMIN')") // add annotation to ensure that only an ADMIN can call this function
-    public void deleteCategory(@PathVariable int id)
-    {
+    public void deleteCategory(@PathVariable int id) throws SQLException {
         // delete the category by id
+        categoryDao.delete(id);
     }
 }
