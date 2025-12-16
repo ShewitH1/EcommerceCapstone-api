@@ -28,8 +28,7 @@ public class CategoriesController
     }
 
 
-    @GetMapping("")
-//    @RequestMapping(path = "/categories", method = RequestMethod.GET) // add the appropriate annotation for a get action
+    @GetMapping("") // add the appropriate annotation for a get action
     public List<Category> getAll() throws SQLException {
         // find and return all categories
 
@@ -41,8 +40,7 @@ public class CategoriesController
         }
     }
 
-    @GetMapping("/{id}")
-//    @RequestMapping(path = "/categories/{id}", method = RequestMethod.GET)// add the appropriate annotation for a get action
+    @GetMapping("/{id}") // add the appropriate annotation for a get action
     public Category getById(@PathVariable int id) throws SQLException {
         // get the category by id
 //        return categoryDao.getById(id);
@@ -77,10 +75,8 @@ public class CategoriesController
 
     }
 
-    @PutMapping("/{id}")
-//    @RequestMapping(path = "/categories/{id}", method = RequestMethod.PUT)  // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
+    @PutMapping("/{id}") // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     @PreAuthorize("hasRole('ROLE_ADMIN')") // add annotation to ensure that only an ADMIN can call this function
-//    @ResponseStatus(HttpStatus.CREATED)
     public void updateCategory(@PathVariable int id, @RequestBody Category category) throws SQLException {
         // update the category by id
         //good
@@ -93,8 +89,7 @@ public class CategoriesController
     }
 
 
-    @DeleteMapping("/{id}")
-//    @RequestMapping(path = "/categories/{id}", method = RequestMethod.DELETE)// add annotation to call this method for a DELETE action - the url path must include the categoryId
+    @DeleteMapping("/{id}") // add annotation to call this method for a DELETE action - the url path must include the categoryId
     @PreAuthorize("hasRole('ROLE_ADMIN')") // add annotation to ensure that only an ADMIN can call this function
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) throws SQLException {
