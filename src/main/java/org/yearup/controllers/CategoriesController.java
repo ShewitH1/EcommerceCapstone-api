@@ -45,7 +45,18 @@ public class CategoriesController
 //    @RequestMapping(path = "/categories/{id}", method = RequestMethod.GET)// add the appropriate annotation for a get action
     public Category getById(@PathVariable int id) throws SQLException {
         // get the category by id
-        return categoryDao.getById(id);
+//        return categoryDao.getById(id);
+
+        //this is the one
+        try{
+            var category = categoryDao.getById(id);
+            if (category == null)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+            return category; // get the category by id
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"getById Error");
+        }
     }
 
     // the url to return all products in category 1 would look like this
@@ -57,17 +68,11 @@ public class CategoriesController
         return null;
     }
 
-    @PostMapping("")// add annotation to call this method for a POST action
+    @PostMapping// add annotation to call this method for a POST action
     @PreAuthorize("hasRole('ROLE_ADMIN')") // add annotation to ensure that only an ADMIN can call this function
     @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody Category category) throws SQLException {
         // insert the category
-//        try{
-//            return categoryDao.create(category);
-//
-//        } catch (Exception e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting categories");
-//        }
         return categoryDao.create(category);
 
     }
@@ -75,25 +80,10 @@ public class CategoriesController
     @PutMapping("/{id}")
 //    @RequestMapping(path = "/categories/{id}", method = RequestMethod.PUT)  // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     @PreAuthorize("hasRole('ROLE_ADMIN')") // add annotation to ensure that only an ADMIN can call this function
-    @ResponseStatus(HttpStatus.CREATED)
+//    @ResponseStatus(HttpStatus.CREATED)
     public void updateCategory(@PathVariable int id, @RequestBody Category category) throws SQLException {
         // update the category by id
-
-//        try{
-//            category.setCategoryId(id);
-//
-//            Category existing = categoryDao.getById(id);
-//            if(existing == null){
-//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-//            }
-//            categoryDao.update(id, category);
-//
-//        } catch (ResponseStatusException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating category");
-//        }
-
+        //good
         try {
             categoryDao.update(id, category);
 
@@ -109,7 +99,7 @@ public class CategoriesController
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) throws SQLException {
         // delete the category by id
-//        categoryDao.delete(id);
+        //good
         try {
             var category = categoryDao.getById(id);
 
