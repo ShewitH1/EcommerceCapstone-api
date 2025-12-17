@@ -79,9 +79,11 @@ public class ProductsController
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateProduct(@PathVariable int id, @RequestBody Product product)
     {
+        //  fixed the bug2 for Phase 2
         try
         {
-            productDao.create(product);
+//            productDao.create(product);
+            productDao.update(id, product);
         }
         catch(Exception ex)
         {
