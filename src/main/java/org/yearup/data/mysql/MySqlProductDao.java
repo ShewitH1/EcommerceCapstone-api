@@ -170,6 +170,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 "   , featured = ? " +
                 " WHERE product_id = ?;";
 
+        //i think this is the bug
         try (Connection connection = getConnection())
         {
             PreparedStatement statement = connection.prepareStatement(sql);
