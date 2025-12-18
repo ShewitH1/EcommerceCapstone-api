@@ -2,9 +2,7 @@ package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
 import org.yearup.data.ShoppingCartDao;
@@ -16,7 +14,9 @@ import java.security.Principal;
 import java.sql.SQLException;
 
 @RestController// convert this class to a REST controller
-@PreAuthorize("permitAll()")// only logged in users should have access to these actions
+@RequestMapping("/cart")
+@CrossOrigin
+@PreAuthorize("isAunthenticated")// only logged in users should have access to these actions
 public class ShoppingCartController
 {
     // a shopping cart requires
@@ -31,6 +31,8 @@ public class ShoppingCartController
         this.productDao = productDao;
     }
 
+
+    @GetMapping
     // each method in this controller requires a Principal object as a parameter
     public ShoppingCart getCart(Principal principal)
     {
@@ -43,7 +45,7 @@ public class ShoppingCartController
             int userId = user.getId();
 
             // use the shoppingcartDao to get all items in the cart and return the cart
-            return null;
+            return shoppingCartDao.getByUserId(userId);
         }
         catch(Exception e)
         {
@@ -54,8 +56,8 @@ public class ShoppingCartController
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
-    @PostMapping("/cart/products/15")
-    public ShoppingCart addProduct(@PathVariable int user_id, int product_id, Principal principal) throws SQLException {
+    @PostMapping("/products/{productId}")
+    public ShoppingCart addProduct(@PathVariable int product_id, Principal principal) {
 
         try {
 
@@ -65,7 +67,9 @@ public class ShoppingCartController
             return shoppingCartDao.addProduct(user.getId(), product_id);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unable to add product to cart");
         }
     }
 
