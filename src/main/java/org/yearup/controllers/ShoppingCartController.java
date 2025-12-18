@@ -2,6 +2,8 @@ package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
@@ -11,6 +13,7 @@ import org.yearup.models.ShoppingCart;
 import org.yearup.models.User;
 
 import java.security.Principal;
+import java.sql.SQLException;
 
 @RestController// convert this class to a REST controller
 @PreAuthorize("permitAll()")// only logged in users should have access to these actions
@@ -51,13 +54,41 @@ public class ShoppingCartController
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
+    @PostMapping("/cart/products/15")
+    public ShoppingCart addProduct(@PathVariable int user_id, int product_id, Principal principal) throws SQLException {
+
+        try {
+
+            String userName = principal.getName();
+            User user = userDao.getByUserName(userName);
+
+            return shoppingCartDao.addProduct(user.getId(), product_id);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//    void update(int userId, int productId, int quantity) throws SQLException;
 
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
 
+
+    public void updateCart(@PathVariable int user_id, int product_id, int quantity){
+
+        return;
+
+    }
+
+
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
+    public void deleteProduct(){
+
+        return;
+    }
 
 }
