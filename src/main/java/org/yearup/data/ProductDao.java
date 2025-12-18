@@ -1,8 +1,10 @@
 package org.yearup.data;
 
+import org.yearup.models.Category;
 import org.yearup.models.Product;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ProductDao
@@ -13,4 +15,6 @@ public interface ProductDao
     Product create(Product product);
     void update(int productId, Product product);
     void delete(int productId);
+
+
 }
