@@ -20,61 +20,47 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public List<Category> getAllCategories()
     {
-
         List<Category> categories = new ArrayList<>();
-
         String query = "select * from categories";
 
-        // get all categories
-        try(Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery()) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
 
-            while(resultSet.next()){
-                int categoryid = resultSet.getInt("category_id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-
-                Category category = new Category(categoryid, name, description);
-
-                categories.add(category);
+            while (resultSet.next()) {
+                categories.add(mapRow(resultSet));
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return categories;
     }
 
+
+
     @Override
-    public Category getById(int categoryId) throws SQLException {
-
+    public Category getById(int categoryId) throws SQLException
+    {
         String query = """
-                select * from categories where category_id = ?
-                """;
+        select * from categories where category_id = ?
+        """;
 
-        // get category by id
-        try(Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            ) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, categoryId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int category_id = resultSet.getInt("category_id");
-                    String name = resultSet.getString("name");
-                    String description = resultSet.getString("description");
-
-                    Category category = new Category(category_id, name, description);
-
-                    return category;
-                } else {
-                    return null;
+                    return mapRow(resultSet);
                 }
+                return null;
             }
         }
     }
+
 
     @Override
     public Category create(Category category) throws SQLException
