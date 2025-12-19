@@ -14,9 +14,9 @@ import java.security.Principal;
 import java.sql.SQLException;
 
 @RestController// convert this class to a REST controller
-@RequestMapping("/cart")
 @CrossOrigin
-@PreAuthorize("isAunthenticated")// only logged in users should have access to these actions
+@RequestMapping("/cart")
+@PreAuthorize("isAuthenticated()")// only logged in users should have access to these actions
 public class ShoppingCartController
 {
     // a shopping cart requires
@@ -57,14 +57,14 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
     @PostMapping("/products/{productId}")
-    public ShoppingCart addProduct(@PathVariable int product_id, Principal principal) {
+    public ShoppingCart addProduct(@PathVariable int productId, Principal principal) {
 
         try {
 
             String userName = principal.getName();
             User user = userDao.getByUserName(userName);
 
-            return shoppingCartDao.addProduct(user.getId(), product_id);
+            return shoppingCartDao.addProduct(user.getId(), productId);
 
         } catch (Exception e) {
             throw new ResponseStatusException(
@@ -90,9 +90,11 @@ public class ShoppingCartController
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
-    public void deleteProduct(){
+    public void deleteProduct(Principal principal) throws SQLException {
 
-        return;
+        String name = principal.getName();
+        User user = userDao.getByUserName(name);
+        shoppingCartDao.clearCart(user.getId());
     }
 
 }

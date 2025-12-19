@@ -51,7 +51,6 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
             //  logic here
             while (resultSet.next()) {
-                //  user_id, product_id, quantity
 //                   int user_Id = resultSet.getInt("user_id");
                 int product_id = resultSet.getInt("product_id");
                 int quantity = resultSet.getInt("quantity");
@@ -79,7 +78,6 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         String sql = """
             INSERT INTO shopping_cart (user_id, product_id, quantity)
             VALUES (?, ?, 1)
-            ON DUPLICATE KEY UPDATE quantity = quantity + 1
         """;
 
         try(Connection connection = getConnection();
@@ -91,7 +89,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             statement.executeUpdate();
 
         } catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return getByUserId(userId);
