@@ -92,6 +92,15 @@ The following **additional** features are implemented:
 ![Accounting Ledger Screenshot](images/viewcartt.png)
 
 
+## Testing Screens with Insomnia
+
+### Testing without optionals - E-Commerce
+![Accounting Ledger Screenshot](images/required.png)
+
+### Testing with optionals - E-Commerce
+![Accounting Ledger Screenshot](images/optional.png)
+
+
 ## Interesting Piece of Code
 1. One of the most interesting features in my Easy Shop project is the shopping cart add-to-cart functionality. It allows logged-in users to add products to their personal cart, which is stored in the database and tied to their account.
 2. This code demonstrates how backend logic connects authentication, database operations, and real-time updates. Each time a product is added, the system associates it with the current user and immediately returns the updated shopping cart, ensuring accurate quantities and a smooth shopping experience.
