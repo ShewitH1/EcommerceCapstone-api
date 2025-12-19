@@ -51,7 +51,6 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
             //  logic here
             while (resultSet.next()) {
-//                   int user_Id = resultSet.getInt("user_id");
                 int product_id = resultSet.getInt("product_id");
                 int quantity = resultSet.getInt("quantity");
 
